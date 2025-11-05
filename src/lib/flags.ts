@@ -6,7 +6,7 @@ export const newCheckout = flag({
   description: "New improved checkout experience - Gradual rollout",
   decide: async (context) => {
     // Context contains user info passed from the component
-    const userId: string = context.entities?.userId;
+    const userId: string | undefined = context.entities?.userId;
     const userEmail = context.entities?.userEmail;
     const betaTesters = ["admin@example.com", "beta@example.com"];
 
