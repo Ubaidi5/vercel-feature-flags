@@ -19,6 +19,7 @@ interface DashboardConfig {
     enhancedDashboard: boolean;
     advancedAnalytics: boolean;
     betaFeatures: boolean;
+    testingFeature: boolean;
   };
   userId: string;
 }
@@ -146,7 +147,7 @@ export default function DashboardPage() {
                   </span>
                 </summary>
                 <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="flex items-center justify-between p-3 bg-white rounded border">
                       <span className="text-sm font-medium">
                         Enhanced Dashboard
@@ -189,6 +190,20 @@ export default function DashboardPage() {
                         }`}
                       >
                         {config?.flags?.betaFeatures ? "ENABLED" : "DISABLED"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between p-3 bg-white rounded border">
+                      <span className="text-sm font-medium">
+                        Testing Feature
+                      </span>
+                      <span
+                        className={`px-2 py-1 text-xs rounded-full ${
+                          config?.flags?.testingFeature
+                            ? "bg-blue-100 text-blue-800"
+                            : "bg-gray-100 text-gray-800"
+                        }`}
+                      >
+                        {config?.flags?.testingFeature ? "TESTING" : "DISABLED"}
                       </span>
                     </div>
                   </div>

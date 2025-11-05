@@ -2,6 +2,7 @@ import {
   enhancedDashboard,
   advancedAnalytics,
   betaFeatures,
+  testingFeature,
 } from "@/lib/flags";
 import { reportValue } from "flags";
 import { NextRequest } from "next/server";
@@ -44,16 +45,27 @@ export async function POST(request: NextRequest) {
     },
   });
 
+  const testingFeatureEnabled = await testingFeature.decide?.({
+    headers,
+    cookies: cookieStore,
+    entities: {
+      userId,
+      userEmail,
+    },
+  });
+
   // Report flag values for analytics
   reportValue("enhanced-dashboard", enhancedDashboardEnabled);
   reportValue("advanced-analytics", advancedAnalyticsEnabled);
   reportValue("beta-features", betaFeaturesEnabled);
+  reportValue("testing-feature", testingFeatureEnabled);
 
   return Response.json({
     flags: {
       enhancedDashboard: enhancedDashboardEnabled,
       advancedAnalytics: advancedAnalyticsEnabled,
       betaFeatures: betaFeaturesEnabled,
+      testingFeature: testingFeatureEnabled,
     },
     userId,
     userEmail,

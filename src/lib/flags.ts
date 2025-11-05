@@ -41,39 +41,40 @@ export const discountCode = flag({
   },
 });
 
-// Dashboard Feature Flags
+// Dashboard Feature Flags - Controlled by Vercel Feature Flags Dashboard
 export const enhancedDashboard = flag({
   key: "enhanced-dashboard",
   description:
-    "Enhanced dashboard with advanced UI and analytics - Gradual rollout to premium users",
+    "Enhanced dashboard with advanced UI and analytics - Controlled via Vercel Dashboard",
   decide: async (context) => {
-    const userId: string | undefined = context.entities?.userId;
+    // This will be overridden by Vercel Feature Flags Dashboard
+    // Default fallback behavior (you can modify this as needed)
     const userEmail = context.entities?.userEmail;
 
-    // Premium users or beta testers get enhanced dashboard
-    const premiumUsers = [
-      "admin@example.com",
-      "premium@example.com",
-      "demo@example.com",
-    ];
-
-    // STRATEGY 1: Premium users always get enhanced dashboard
-    if (userEmail && premiumUsers.includes(userEmail)) {
-      return true;
+    // Fallback: Enable for testing domains
+    if (userEmail) {
+      const testingDomains = ["yopmail.com", "test.com", "testing.com"];
+      const emailDomain = userEmail.split("@")[1];
+      return testingDomains.includes(emailDomain);
     }
 
-    // STRATEGY 2: Gradual rollout - enable for 50% of users
-    if (userId) {
-      const hash = userId
-        .split("")
-        .reduce((acc, char) => acc + char.charCodeAt(0), 0);
-      const percentage = (hash % 100) + 1;
+    return false; // Default: disabled
+  },
+});
 
-      // 50% rollout for enhanced dashboard
-      return percentage <= 50;
+export const testingFeature = flag({
+  key: "testing-feature",
+  description: "Testing feature for yopmail and testing domains",
+  decide: async (context) => {
+    const userEmail = context.entities?.userEmail;
+
+    // Enable for testing email domains
+    if (userEmail) {
+      const testingDomains = ["yopmail.com", "test.com", "testing.com"];
+      const emailDomain = userEmail.split("@")[1];
+      return testingDomains.includes(emailDomain);
     }
 
-    // Default: simple dashboard
     return false;
   },
 });
