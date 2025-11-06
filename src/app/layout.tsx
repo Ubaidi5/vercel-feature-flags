@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { VercelToolbar } from "@vercel/toolbar/next";
+import { existsSync } from "fs";
+import { join } from "path";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,13 +25,17 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Check if project is linked to Vercel by checking for .vercel directory
+  const isVercelLinked = existsSync(join(process.cwd(), ".vercel", "project.json"));
+  const shouldInjectToolbar = process.env.NODE_ENV === "development" && isVercelLinked;
+  
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
-        <VercelToolbar />
+        {shouldInjectToolbar && <VercelToolbar />}
       </body>
     </html>
   );
