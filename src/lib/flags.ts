@@ -15,7 +15,7 @@ export const testingFeature = flag({
 
     // Fallback: Enable for testing email domains when no override is active
     if (userEmail) {
-      const testingDomains = ["yopmail.com", "test.com", "testing.com"];
+      const testingDomains = ["yopmail.com"];
       const emailDomain = userEmail.split("@")[1];
       return testingDomains.includes(emailDomain);
     }

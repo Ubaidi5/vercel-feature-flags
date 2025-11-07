@@ -43,9 +43,9 @@ export default function DashboardPage() {
         const response = await fetch("/api/dashboard/config", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            userId: parsedUser.id, 
-            userEmail: parsedUser.email 
+          body: JSON.stringify({
+            userId: parsedUser.id,
+            userEmail: parsedUser.email,
           }),
         });
 
@@ -76,10 +76,10 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-gray-950 via-gray-900 to-blue-950">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading dashboard...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-300">Loading dashboard...</p>
         </div>
       </div>
     );
@@ -90,15 +90,15 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-linear-to-br from-gray-950 via-gray-900 to-gray-950 flex flex-col">
       {/* Header */}
       <Header user={user} onLogout={handleLogout} />
 
       {/* Main Content */}
       <main className="flex-1">
-        <SimpleDashboard 
-          user={user} 
-          showTestingBanner={config?.flags?.testingFeature || false} 
+        <SimpleDashboard
+          user={user}
+          showTestingBanner={config?.flags?.testingFeature || false}
         />
       </main>
 

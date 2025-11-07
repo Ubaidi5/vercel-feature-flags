@@ -38,15 +38,19 @@ const SimpleDashboard: React.FC<SimpleDashboardProps> = ({
   ];
 
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-7xl mx-auto">
       {/* Testing Feature Banner - Only shows if flag is enabled */}
       {showTestingBanner && (
-        <div className="mb-6 p-4 bg-linear-to-r from-blue-500 to-purple-600 text-white rounded-lg shadow-lg">
+        <div className="mb-6 p-5 bg-linear-to-r from-blue-600 to-purple-600 text-white rounded-xl shadow-2xl border border-blue-500/20">
           <div className="flex items-center">
-            <span className="text-2xl mr-3">🧪</span>
+            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mr-4">
+              <span className="text-2xl">🧪</span>
+            </div>
             <div>
-              <h3 className="font-bold text-lg">Testing Feature Enabled!</h3>
-              <p className="text-blue-100">
+              <h3 className="font-bold text-lg mb-1">
+                Testing Feature Enabled!
+              </h3>
+              <p className="text-blue-100 text-sm">
                 This banner is controlled by the "testing-feature" flag. You're
                 seeing this because the feature flag is enabled for your
                 account.
@@ -58,34 +62,30 @@ const SimpleDashboard: React.FC<SimpleDashboardProps> = ({
 
       {/* Dashboard Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Welcome back, {user.name}! 👋
+        <h1 className="text-4xl font-bold text-white mb-2">
+          Welcome, {user.name}! 👋
         </h1>
-        <p className="text-gray-600 mt-2">
-          Here's your simple dashboard overview.
-        </p>
+        <p className="text-gray-400 text-lg">Here's your dashboard overview</p>
       </div>
 
       {/* Three Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {stats.map((stat, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-md p-6 border border-gray-200"
+            className="bg-gray-800/50 backdrop-blur-xl rounded-xl shadow-xl p-6 border border-gray-700/50 hover:border-gray-600/50 transition-all hover:shadow-2xl"
           >
             <div className="flex items-center">
               <div
-                className={`${stat.color} w-12 h-12 rounded-lg flex items-center justify-center text-white text-xl mr-4`}
+                className={`${stat.color} w-14 h-14 rounded-xl flex items-center justify-center text-white text-2xl mr-4 shadow-lg`}
               >
                 {stat.icon}
               </div>
               <div>
-                <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1">
                   {stat.title}
                 </h3>
-                <p className="text-2xl font-bold text-gray-900 mt-1">
-                  {stat.value}
-                </p>
+                <p className="text-3xl font-bold text-white">{stat.value}</p>
               </div>
             </div>
           </div>
@@ -93,25 +93,30 @@ const SimpleDashboard: React.FC<SimpleDashboardProps> = ({
       </div>
 
       {/* Feature Flag Status */}
-      <div className="mt-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
-        <h3 className="font-semibold text-gray-900 mb-2">
-          🚩 Feature Flag Status
+      <div className="mt-8 p-6 bg-gray-800/50 backdrop-blur-xl rounded-xl border border-gray-700/50 shadow-xl">
+        <h3 className="font-bold text-white mb-4 flex items-center text-lg">
+          <span className="mr-2">🚩</span>
+          Feature Flag Status
         </h3>
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-700">Testing Feature</span>
+        <div className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg">
+          <span className="text-sm font-medium text-gray-300">
+            Testing Feature
+          </span>
           <span
-            className={`px-3 py-1 text-xs font-medium rounded-full ${
+            className={`px-4 py-1.5 text-xs font-bold rounded-full ${
               showTestingBanner
-                ? "bg-green-100 text-green-800"
-                : "bg-gray-100 text-gray-800"
+                ? "bg-green-500/20 text-green-300 border border-green-500/50"
+                : "bg-gray-700/50 text-gray-400 border border-gray-600/50"
             }`}
           >
             {showTestingBanner ? "ENABLED" : "DISABLED"}
           </span>
         </div>
-        <p className="text-xs text-gray-500 mt-2">
+        <p className="text-xs text-gray-500 mt-4">
           User Email:{" "}
-          <code className="bg-gray-200 px-1 rounded">{user.email}</code>
+          <code className="bg-gray-900/50 px-2 py-1 rounded text-gray-300 font-mono">
+            {user.email}
+          </code>
         </p>
       </div>
     </div>
