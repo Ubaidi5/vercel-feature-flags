@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Header, Footer } from "@/app/components/layout";
 import SimpleDashboard from "@/app/components/simple-dashboard";
+import { getFlagValue } from "@/server-actions";
 
 interface User {
   id: string;
@@ -11,16 +12,9 @@ interface User {
   email: string;
 }
 
-interface DashboardConfig {
-  flags: {
-    testingFeature: boolean;
-  };
-  userId: string;
-}
-
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [config, setConfig] = useState<DashboardConfig | null>(null);
+  const [isTestingFeatureEnabled, setIsTestingFeatureEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -40,24 +34,9 @@ export default function DashboardPage() {
     // Fetch feature flag configuration
     const fetchConfig = async () => {
       try {
-        const response = await fetch("/api/dashboard/config", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: parsedUser.id,
-            userEmail: parsedUser.email,
-          }),
-        });
-
-        const data = await response.json();
-        setConfig(data);
-
-        // Store flag info in DOM for Web Analytics integration
-        document.documentElement.setAttribute(
-          "data-flags",
-          JSON.stringify(data.flags)
-        );
-
+        // const flagValue = await newFlag(); Doing this will throw an error because it's a client component.
+        const flagValue = await getFlagValue();
+        setIsTestingFeatureEnabled(flagValue);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching dashboard config:", error);
@@ -91,18 +70,15 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-950 via-gray-900 to-gray-950 flex flex-col">
-      {/* Header */}
       <Header user={user} onLogout={handleLogout} />
 
-      {/* Main Content */}
       <main className="flex-1">
         <SimpleDashboard
           user={user}
-          showTestingBanner={config?.flags?.testingFeature || false}
+          showTestingBanner={isTestingFeatureEnabled}
         />
       </main>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

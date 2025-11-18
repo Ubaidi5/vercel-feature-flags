@@ -1,85 +1,129 @@
 import { createClient } from "@vercel/edge-config";
+import { flag } from "flags/next";
 
 // Initialize Edge Config client
 const edgeConfig = process.env.EDGE_CONFIG
   ? createClient(process.env.EDGE_CONFIG)
   : null;
 
-// Feature flag interface
-export interface FeatureFlags {
-  testingFeature: boolean;
-}
-
-// Default feature flags when Edge Config is not available
-const defaultFlags: FeatureFlags = {
-  testingFeature: false,
+const defaultValues = {
+  newFlag: false,
 };
 
-/**
- * Get all feature flags from Edge Config
- * Falls back to default values if Edge Config is not configured
- */
-export async function getAllFlags(): Promise<FeatureFlags> {
-  try {
+export const newFlag = flag<boolean>({
+  key: "new-test-flag",
+  description: "A new flag for testing",
+  defaultValue: defaultValues.newFlag,
+  decide: async () => {
     if (!edgeConfig) {
-      console.warn("Edge Config not configured, using default flags");
-      return defaultFlags;
+      return defaultValues.newFlag;
     }
 
-    // Get all flags from Edge Config
-    const flags = await edgeConfig.getAll();
+    const value = await edgeConfig.get<boolean>("new-test-flag");
+    return value ?? defaultValues.newFlag;
+  },
+});
 
-    // Merge with defaults to ensure all flags exist
-    return {
-      testingFeature:
-        (flags?.testingFeature as boolean) ?? defaultFlags.testingFeature,
-    };
-  } catch (error) {
-    console.error("Error fetching flags from Edge Config:", error);
-    return defaultFlags;
-  }
-}
+// Feature flag interface
+// export interface FeatureFlags {
+//   testingFeature: boolean;
+// }
 
-/**
- * Get a specific feature flag from Edge Config
- * @param key - The flag key to retrieve
- * @param defaultValue - Fallback value if flag is not found
- */
-export async function getFlag<K extends keyof FeatureFlags>(
-  key: K,
-  defaultValue?: boolean
-): Promise<boolean> {
-  try {
-    if (!edgeConfig) {
-      console.warn(`Edge Config not configured, using default for ${key}`);
-      return defaultValue ?? defaultFlags[key];
-    }
+// // Default feature flags when Edge Config is not available
+// const defaultFlags: FeatureFlags = {
+//   testingFeature: false,
+// };
 
-    const value = await edgeConfig.get<boolean>(key);
-    return value ?? defaultValue ?? defaultFlags[key];
-  } catch (error) {
-    console.error(`Error fetching flag ${key} from Edge Config:`, error);
-    return defaultValue ?? defaultFlags[key];
-  }
-}
+// // Define flags with the new SDK for Toolbar integration
+// export const testingFeatureFlag = flag<boolean>({
+//   key: "testingFeature",
+//   description: "Controls the testing feature banner on dashboard",
+//   defaultValue: false,
+//   options: [
+//     { value: false, label: "Off" },
+//     { value: true, label: "On" },
+//   ],
+//   async decide({ cookies }) {
+//     // Get the base value from Edge Config
+//     if (!edgeConfig) {
+//       return defaultFlags.testingFeature;
+//     }
 
-/**
- * Evaluate feature flags based on user context
- * This allows for advanced targeting based on user properties
- * @param userId - User identifier
- * @param userEmail - User email for email-based targeting
- */
-export async function evaluateFlags(
-  userId: string,
-  userEmail: string
-): Promise<FeatureFlags> {
-  const flags = await getAllFlags();
+//     try {
+//       const value = await edgeConfig.get<boolean>("testingFeature");
+//       return value ?? defaultFlags.testingFeature;
+//     } catch (error) {
+//       console.error("Error fetching testingFeature from Edge Config:", error);
+//       return defaultFlags.testingFeature;
+//     }
+//   },
+// });
 
-  // Beta tester targeting: Enable testing feature for specific emails
-  const betaTesterEmails = ["admin@example.com", "beta@example.com"];
-  if (betaTesterEmails.includes(userEmail)) {
-    flags.testingFeature = true;
-  }
+// /**
+//  * Get all feature flags from Edge Config
+//  * Falls back to default values if Edge Config is not configured
+//  */
+// export async function getAllFlags(): Promise<FeatureFlags> {
+//   try {
+//     if (!edgeConfig) {
+//       console.warn("Edge Config not configured, using default flags");
+//       return defaultFlags;
+//     }
 
-  return flags;
-}
+//     // Get all flags from Edge Config
+//     const flags = await edgeConfig.getAll();
+
+//     // Merge with defaults to ensure all flags exist
+//     return {
+//       testingFeature:
+//         (flags?.testingFeature as boolean) ?? defaultFlags.testingFeature,
+//     };
+//   } catch (error) {
+//     console.error("Error fetching flags from Edge Config:", error);
+//     return defaultFlags;
+//   }
+// }
+
+// /**
+//  * Get a specific feature flag from Edge Config
+//  * @param key - The flag key to retrieve
+//  * @param defaultValue - Fallback value if flag is not found
+//  */
+// export async function getFlag<K extends keyof FeatureFlags>(
+//   key: K,
+//   defaultValue?: boolean
+// ): Promise<boolean> {
+//   try {
+//     if (!edgeConfig) {
+//       console.warn(`Edge Config not configured, using default for ${key}`);
+//       return defaultValue ?? defaultFlags[key];
+//     }
+
+//     const value = await edgeConfig.get<boolean>(key);
+//     return value ?? defaultValue ?? defaultFlags[key];
+//   } catch (error) {
+//     console.error(`Error fetching flag ${key} from Edge Config:`, error);
+//     return defaultValue ?? defaultFlags[key];
+//   }
+// }
+
+// /**
+//  * Evaluate feature flags based on user context
+//  * This allows for advanced targeting based on user properties
+//  * @param userId - User identifier
+//  * @param userEmail - User email for email-based targeting
+//  */
+// export async function evaluateFlags(
+//   userId: string,
+//   userEmail: string
+// ): Promise<FeatureFlags> {
+//   const flags = await getAllFlags();
+
+//   // Beta tester targeting: Enable testing feature for specific emails
+//   const betaTesterEmails = ["admin@example.com", "beta@example.com"];
+//   if (betaTesterEmails.includes(userEmail)) {
+//     flags.testingFeature = true;
+//   }
+
+//   return flags;
+// }
