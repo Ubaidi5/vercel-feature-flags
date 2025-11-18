@@ -12,16 +12,9 @@ interface User {
   email: string;
 }
 
-interface DashboardConfig {
-  flags: {
-    testingFeature: boolean;
-  };
-  userId: string;
-}
-
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [config, setConfig] = useState("");
+  const [isTestingFeatureEnabled, setIsTestingFeatureEnabled] = useState(false);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -43,7 +36,7 @@ export default function DashboardPage() {
       try {
         // const flagValue = await newFlag(); Doing this will throw an error because it's a client component.
         const flagValue = await getFlagValue();
-        setConfig(flagValue);
+        setIsTestingFeatureEnabled(flagValue);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching dashboard config:", error);
@@ -80,7 +73,10 @@ export default function DashboardPage() {
       <Header user={user} onLogout={handleLogout} />
 
       <main className="flex-1">
-        <SimpleDashboard user={user} showTestingBanner={!!config} />
+        <SimpleDashboard
+          user={user}
+          showTestingBanner={isTestingFeatureEnabled}
+        />
       </main>
 
       <Footer />
