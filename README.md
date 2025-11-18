@@ -45,19 +45,81 @@ Open [http://localhost:3000](http://localhost:3000) with your browser.
 
 ### Demo Credentials
 
-Click "Fill demo credentials" on the login page, or use:
-- Email: `demo@example.com`
-- Password: `demo123` (any 6+ characters work)
+**You can use ANY email address and ANY password (minimum 6 characters) to login!**
+
+Quick examples:
+- Email: `demo@example.com` or `test@yopmail.com`
+- Password: `123456` (any 6+ characters work)
+
+Or click **"Fill demo credentials"** on the login page for auto-fill.
+
+## 🧪 How to See the Testing Banner
+
+The testing banner is a **domain-based feature flag** that demonstrates targeted feature rollouts based on user email domains.
+
+### 🎯 Testing Banner Rules
+
+The testing banner has **domain-specific targeting**:
+
+**✅ WILL see the banner:**
+- Any email with `@yopmail.com` domain
+- Examples: `test@yopmail.com`, `user123@yopmail.com`, `hello@yopmail.com`
+
+**❌ Will NOT see the banner:**
+- Any other email domain
+- Examples: `user@gmail.com`, `demo@example.com`, `test@outlook.com`
+
+### Quick Test Instructions
+
+**Step 1: See the Banner (ENABLED)**
+1. Go to the login page
+2. Enter email: `yourname@yopmail.com` (any name works)
+3. Enter password: `123456` (any 6+ characters)
+4. Click "Sign in"
+5. ✅ You'll see the **blue-purple testing banner** at the top of the dashboard
+
+**Step 2: Compare Without Banner (DISABLED)**
+1. Log out (click your avatar → Logout)
+2. Login with: `demo@gmail.com`
+3. Enter password: `123456`
+4. Click "Sign in"
+5. ❌ No banner appears - showing the default experience
+
+### What You'll See
+
+**With Yopmail Domain (Enabled):**
+```
+┌─────────────────────────────────────────────┐
+│ 🧪 Testing Feature Enabled!                 │
+│ This banner is controlled by the            │
+│ "testing-feature" flag. You're seeing this  │
+│ because the feature flag is enabled for     │
+│ your account.                                │
+└─────────────────────────────────────────────┘
+```
+- Feature Flag Status shows: **"ENABLED"** (green badge)
+
+**With Other Domains (Disabled):**
+- No banner displayed at the top
+- Feature Flag Status shows: **"DISABLED"** (gray badge)
+
+### 💡 Why Domain-Based Targeting?
+
+This demonstrates a real-world use case:
+- **Beta Testing**: Roll out features to specific domains first (e.g., internal company domains)
+- **A/B Testing**: Compare user experience across different user segments
+- **Gradual Rollouts**: Enable features for select user groups before full launch
 
 ## 🎯 Feature Flag Strategies
 
-### 1. Edge Config Storage
-Base flag values are stored in Vercel Edge Config for instant global updates.
+### 1. Domain-Based Targeting
+The testing banner feature uses **email domain targeting**:
+- Users with `@yopmail.com` domain see the testing banner
+- All other domains see the default experience
+- This demonstrates targeted feature rollouts by user segments
 
-### 2. Beta Tester Targeting
-Specific email addresses always get the testing feature enabled:
-- `admin@example.com`
-- `beta@example.com`
+### 2. Edge Config Storage (Optional)
+Base flag values can be stored in Vercel Edge Config for instant global updates and centralized control.
 
 ## 🏗️ Architecture
 

@@ -169,32 +169,80 @@ export default function LoginPage() {
             </div>
           </form>
 
-          {/* Demo Section */}
-          <div className="mt-6 pt-6 border-t border-gray-700">
-            <div className="text-center">
-              <p className="text-sm text-gray-400 mb-3">
-                Want to try the demo?
+          {/* Feature Flag Info */}
+          <div className="mt-6 p-4 bg-linear-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-lg">
+            <h3 className="font-semibold text-blue-300 mb-2 flex items-center">
+              <span className="mr-2">🚩</span>
+              Feature Flag Demo
+            </h3>
+            <p className="text-sm text-gray-300 leading-relaxed mb-3">
+              Use any email and any password (minimum 6 characters) to login.
+            </p>
+
+            <div className="mt-3 pt-3 border-t border-blue-500/10">
+              <p className="font-semibold text-blue-300 mb-2">
+                🧪 Testing Banner Availability:
               </p>
-              <button
-                onClick={handleDemoLogin}
-                className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors"
-              >
-                Fill demo credentials →
-              </button>
+              <div className="space-y-2 text-sm text-gray-300">
+                <div className="flex items-start">
+                  <span className="text-green-400 mr-2">✓</span>
+                  <div>
+                    <strong className="text-green-400">
+                      Yopmail domain users
+                    </strong>{" "}
+                    will see the testing banner
+                    <br />
+                    <span className="text-gray-400">Example: </span>
+                    <code className="bg-gray-900/50 px-1.5 py-0.5 rounded text-blue-300">
+                      yourname@yopmail.com
+                    </code>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <span className="text-red-400 mr-2">✗</span>
+                  <div>
+                    <strong className="text-red-400">Other domain users</strong>{" "}
+                    will NOT see the banner
+                    <br />
+                    <span className="text-gray-400">Example: </span>
+                    <code className="bg-gray-900/50 px-1.5 py-0.5 rounded text-gray-400">
+                      user@gmail.com
+                    </code>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Feature Flag Info */}
-          <div className="mt-6 p-4 bg-linear-to-r from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-lg">
-            <h3 className="text-sm font-semibold text-blue-300 mb-2 flex items-center">
-              <span className="mr-2">🚩</span>
-              About Feature Flags
-            </h3>
-            <p className="text-xs text-gray-300 leading-relaxed">
-              After login, you'll experience either a simple or enhanced
-              dashboard based on feature flag evaluation. This demonstrates A/B
-              testing capabilities.
+          {/* Feature Flag Control Info */}
+          <div className="mt-4 pt-4 border-t border-purple-500/10">
+            <p className="font-semibold text-purple-300 mb-2">
+              ⚙️ Control Feature Flags:
             </p>
+            <div className="space-y-2 text-sm text-gray-300">
+              <div className="flex items-start">
+                <span className="text-purple-400 mr-2">🔧</span>
+                <div>
+                  <strong className="text-purple-300">Vercel Toolbar:</strong>{" "}
+                  Toggle flags for your session only
+                  <br />
+                  <span className="text-gray-400 text-xs">
+                    Perfect for testing without affecting other users
+                  </span>
+                </div>
+              </div>
+              <div className="flex items-start">
+                <span className="text-purple-400 mr-2">🌐</span>
+                <div>
+                  <strong className="text-purple-300">Edge Config:</strong>{" "}
+                  Enable/disable flags for everyone globally
+                  <br />
+                  <span className="text-gray-400 text-xs">
+                    Changes take effect in ~1 second worldwide
+                  </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
