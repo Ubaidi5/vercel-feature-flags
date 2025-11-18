@@ -1,4 +1,5 @@
 import { createClient } from "@vercel/edge-config";
+import { flag } from "flags/next";
 
 // Initialize Edge Config client
 const edgeConfig = process.env.EDGE_CONFIG
@@ -14,6 +15,31 @@ export interface FeatureFlags {
 const defaultFlags: FeatureFlags = {
   testingFeature: false,
 };
+
+// Define flags with the new SDK for Toolbar integration
+export const testingFeatureFlag = flag<boolean>({
+  key: "testingFeature",
+  description: "Controls the testing feature banner on dashboard",
+  defaultValue: false,
+  options: [
+    { value: false, label: "Off" },
+    { value: true, label: "On" },
+  ],
+  async decide({ cookies }) {
+    // Get the base value from Edge Config
+    if (!edgeConfig) {
+      return defaultFlags.testingFeature;
+    }
+
+    try {
+      const value = await edgeConfig.get<boolean>("testingFeature");
+      return value ?? defaultFlags.testingFeature;
+    } catch (error) {
+      console.error("Error fetching testingFeature from Edge Config:", error);
+      return defaultFlags.testingFeature;
+    }
+  },
+});
 
 /**
  * Get all feature flags from Edge Config
