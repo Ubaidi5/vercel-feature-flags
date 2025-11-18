@@ -34,8 +34,7 @@ export default function DashboardPage() {
     // Fetch feature flag configuration
     const fetchConfig = async () => {
       try {
-        // const flagValue = await newFlag(); Doing this will throw an error because it's a client component.
-        const flagValue = await getFlagValue();
+        const flagValue = await getFlagValue(parsedUser.email);
         setIsTestingFeatureEnabled(flagValue);
         setLoading(false);
       } catch (error) {
