@@ -6,6 +6,23 @@ const edgeConfig = process.env.EDGE_CONFIG
   ? createClient(process.env.EDGE_CONFIG)
   : null;
 
+export const newFlag = flag<string>({
+  key: "new-test-flag",
+  description: "A new flag for testing",
+  // options: [
+  //   { value: false, label: "Off" },
+  //   { value: true, label: "On" },
+  // ],
+  decide: async ({ cookies }): Promise<string> => {
+    if (!edgeConfig) {
+      return "No edge config";
+    }
+
+    const value = await edgeConfig.get<string>("new-test-flag");
+    return value as string;
+  },
+});
+
 // Feature flag interface
 export interface FeatureFlags {
   testingFeature: boolean;
